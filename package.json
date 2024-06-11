@@ -1,9 +1,10 @@
 {
-  "name": "batch-3-apollo-flix-conceptual-session",
+  "name": "apollo-batch03-assignment03-car-wash-booking",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start:dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
     "start:prod": "node ./dist/server.js",
     "lint": "npx eslint ./src",

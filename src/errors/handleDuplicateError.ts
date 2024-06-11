@@ -4,7 +4,7 @@ import {
   TGenericErrorResponse,
 } from '../interface/globalErrorInterface';
 
-const handleDuplicateError = (err: any): TGenericErrorResponse => {
+const handleDuplicateError = (err: { message: string; }): TGenericErrorResponse => {
   // Extract value within double quotes using regex
   const match = err.message.match(/"([^"]*)"/);
 

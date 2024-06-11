@@ -7,7 +7,6 @@ import handleDuplicateError from '../errors/handleDuplicateError';
 import AppError from '../errors/appError';
 import { TErrorSources } from '../interface/globalErrorInterface';
 import handleZodValidationError from '../errors/handleZodValidationError';
-import httpStatus from 'http-status';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
