@@ -13,10 +13,14 @@ export const createIntervalsArray = (
   const end = new Date(`${date}T${endTime}:00`);
 
   while (start < end) {
-    const intervalStartTime = start.toTimeString().substring(0, 5);
     const nextEnd = new Date(start);
     nextEnd.setMinutes(start.getMinutes() + serviceData?.duration);
 
+    if (nextEnd > end) {
+      break;
+    }
+
+    const intervalStartTime = start.toTimeString().substring(0, 5);
     const intervalEndTime =
       nextEnd < end ? nextEnd.toTimeString().substring(0, 5) : endTime;
 
