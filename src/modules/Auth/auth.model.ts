@@ -17,6 +17,7 @@ const UserSignUpSchema = new Schema<IUserSignUp, UserModel>(
     password: {
       type: String,
       required: true,
+      select: 0,
     },
     phone: {
       type: String,
@@ -55,7 +56,14 @@ UserSignUpSchema.pre('save', async function (next) {
 });
 
 UserSignUpSchema.statics.isUserExists = async function (email: string) {
-  return await User.findOne({ email });
+  return await User.findOne({ email }).select('+password');
+};
+
+UserSignUpSchema.statics.isPasswordMatched = async function (
+  plainTextPassword,
+  hashedPassword,
+) {
+  return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
 
 export const User = model<IUserSignUp, UserModel>('User', UserSignUpSchema);
