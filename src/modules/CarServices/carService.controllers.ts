@@ -14,6 +14,45 @@ const createCarService = catchAsync(async (req, res) => {
   });
 });
 
+const getAllServices = catchAsync(async (req, res) => {
+  const result = await ServicesOfCarService.getAllServicesFromDB();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Services retrieved successfully',
+    data: result,
+  });
+});
+
+const getSingleService = catchAsync(async (req, res) => {
+  const id = req.params.id;
+
+  const result = await ServicesOfCarService.getSingleServiceFromDB(id);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Service retrieved successfully',
+    data: result,
+  });
+});
+
+const updateService = catchAsync(async (req, res) => {
+  const id = req.params.id;
+
+  const result = await ServicesOfCarService.updateServiceIntoDB(req.body, id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Service updated successfully',
+    data: result,
+  });
+});
+
 export const carServiceControllers = {
   createCarService,
+  getAllServices,
+  getSingleService,
+  updateService,
 };

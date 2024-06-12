@@ -11,4 +11,14 @@ router.post(
   carServiceControllers.createCarService,
 );
 
+router.get('/:id', carServiceControllers.getSingleService);
+
+router.put(
+  '/:id',
+  validateRequest(carServiceValidations.updateCarServiceValidationSchema),
+  carServiceControllers.updateService,
+);
+
+router.get('/', carServiceControllers.getAllServices);
+
 export const CarServiceRoutes = router;
