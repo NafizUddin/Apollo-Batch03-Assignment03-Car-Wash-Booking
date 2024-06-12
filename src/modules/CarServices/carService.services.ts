@@ -18,9 +18,16 @@ const getAllServicesFromDB = async () => {
 };
 
 const getSingleServiceFromDB = async (id: string) => {
-  const result = await CarService.findById(id);
+  const singleService = await CarService.findById(id);
 
-  return result;
+  if (singleService?.isDeleted) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Couldn't find Car Service as it is deleted!",
+    );
+  } else {
+    return singleService;
+  }
 };
 
 const updateServiceIntoDB = async (
@@ -34,9 +41,24 @@ const updateServiceIntoDB = async (
   return result;
 };
 
+const deleteServiceFromDB = async (id: string) => {
+  const result = await CarService.findByIdAndUpdate(
+    id,
+    {
+      isDeleted: true,
+    },
+    {
+      new: true,
+    },
+  );
+
+  return result;
+};
+
 export const ServicesOfCarService = {
   createServiceIntoDB,
   getAllServicesFromDB,
   getSingleServiceFromDB,
   updateServiceIntoDB,
+  deleteServiceFromDB,
 };

@@ -15,6 +15,11 @@ const carServiceSchema = new Schema<ICarService, CarServiceModel>(
   },
 );
 
+carServiceSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
 carServiceSchema.statics.isServiceExists = async function (name: string) {
   return await CarService.findOne({ name });
 };

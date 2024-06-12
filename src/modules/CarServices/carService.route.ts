@@ -19,6 +19,8 @@ router.put(
   carServiceControllers.updateService,
 );
 
+router.delete('/:id', carServiceControllers.deleteService);
+
 router.get('/', carServiceControllers.getAllServices);
 
 export const CarServiceRoutes = router;
