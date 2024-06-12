@@ -3,6 +3,8 @@ import AppError from '../../errors/appError';
 import { ICarService } from './carService.interface';
 import { CarService } from './carService.model';
 import { TSlotAppointment } from '../Slots/slots.interface';
+import { createIntervalsArray } from './carService.utils';
+import { SlotAppointment } from '../Slots/slots.model';
 
 const createServiceIntoDB = async (payload: ICarService) => {
   if (await CarService.isServiceExists(payload?.name)) {
@@ -54,12 +56,32 @@ const deleteServiceFromDB = async (id: string) => {
 };
 
 const createSlotAppointmentIntoDB = async (payload: TSlotAppointment) => {
-  console.log(payload);
+  const service = await CarService.findById(payload.service);
 
-  
+  if (!service) {
+    throw new AppError(httpStatus.NOT_FOUND, "Car Service doesn't exist!");
+  }
 
-  const start = new Date(`1970-01-01T${payload.startTime}:00Z`);
-  const end = new Date(`1970-01-01T${payload.endTime}:00Z`);
+  const startDate = new Date(`${payload.date} ${payload.startTime}`);
+  const endDate = new Date(`${payload.date} ${payload.endTime}`);
+
+  // Get the difference in milliseconds
+  const timeDifference = endDate.getTime() - startDate.getTime();
+
+  // Convert the difference to minutes and round down to the nearest whole minute
+  const totalSlotDuration = Math.floor(timeDifference / (1000 * 60));
+
+  if (totalSlotDuration < service?.duration) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'Slot duration is insufficient!',
+    );
+  }
+
+  const appointedSlotsArray = createIntervalsArray(payload, service);
+
+  const result = await SlotAppointment.create(appointedSlotsArray);
+  return result;
 };
 
 export const ServicesOfCarService = {
