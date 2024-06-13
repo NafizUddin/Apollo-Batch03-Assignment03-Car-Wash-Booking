@@ -3,6 +3,8 @@ import validateRequest from '../../middlewares/validateRequest';
 import { carServiceValidations } from './carService.validation';
 import { carServiceControllers } from './carService.controllers';
 import { slotAppointmentValidation } from '../Slots/slots.validation';
+import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../Auth/auth.constant';
 
 const router = express.Router();
 
@@ -30,6 +32,10 @@ router.put(
 
 router.delete('/:id', carServiceControllers.deleteService);
 
-router.get('/', carServiceControllers.getAllServices);
+router.get(
+  '/',
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  carServiceControllers.getAllServices,
+);
 
 export const CarServiceRoutes = router;
