@@ -13,7 +13,7 @@ app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use('/api', routes_1.default);
 app.get('/', (req, res) => {
-    res.send('Hello World Mama!');
+    res.send('Welcome to Car Wash Booking!');
 });
 app.use(globalErrorHandler_1.default);
 app.use(notFound_1.default);

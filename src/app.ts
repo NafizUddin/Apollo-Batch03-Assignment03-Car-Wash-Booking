@@ -11,7 +11,7 @@ app.use(cors());
 app.use('/api', router);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World Mama!');
+  res.send('Welcome to Car Wash Booking!');
 });
 
 app.use(globalErrorHandler);

@@ -19,6 +19,7 @@ const auth_model_1 = require("../Auth/auth.model");
 const carService_model_1 = require("../CarServices/carService.model");
 const slots_model_1 = require("../Slots/slots.model");
 const booking_model_1 = require("./booking.model");
+const mongoose_1 = __importDefault(require("mongoose"));
 const createBookingIntoDB = (payload, userData) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = userData;
     const user = yield auth_model_1.User.isUserExists(email);
@@ -35,8 +36,23 @@ const createBookingIntoDB = (payload, userData) => __awaiter(void 0, void 0, voi
         throw new appError_1.default(http_status_1.default.NOT_FOUND, "Slot Appointment doesn't exist!");
     }
     const bookingData = Object.assign(Object.assign({}, payload), { customer: customerId });
-    const result = yield (yield booking_model_1.Booking.create(bookingData)).populate([{ path: 'customer' }, { path: 'service' }, { path: 'slot' }]);
-    return result;
+    const session = yield mongoose_1.default.startSession();
+    try {
+        session.startTransaction();
+        const result = yield (yield booking_model_1.Booking.create(bookingData)).populate([{ path: 'customer' }, { path: 'service' }, { path: 'slot' }]);
+        if (!result) {
+            throw new appError_1.default(http_status_1.default.BAD_REQUEST, 'Failed to book service!');
+        }
+        yield slots_model_1.SlotAppointment.findByIdAndUpdate(slot === null || slot === void 0 ? void 0 : slot._id, { isBooked: 'booked' }, { new: true });
+        yield session.commitTransaction();
+        yield session.endSession();
+        return result;
+    }
+    catch (error) {
+        yield session.abortTransaction();
+        yield session.endSession();
+        throw new appError_1.default(http_status_1.default.BAD_REQUEST, 'Failed to book service!');
+    }
 });
 const getAllBookingsFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield booking_model_1.Booking.find().populate([

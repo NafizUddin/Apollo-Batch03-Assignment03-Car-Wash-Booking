@@ -48,7 +48,7 @@ const createBookingIntoDB = async (
     }
 
     await SlotAppointment.findByIdAndUpdate(
-      slot,
+      slot?._id,
       { isBooked: 'booked' },
       { new: true },
     );
