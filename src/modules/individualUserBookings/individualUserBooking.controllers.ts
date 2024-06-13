@@ -9,6 +9,15 @@ const getIndividualUserBookings = catchAsync(async (req, res) => {
       req.user,
     );
 
+  if (result === null) {
+    return sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.NOT_FOUND,
+      message: 'No Data Found',
+      data: [],
+    });
+  }
+
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

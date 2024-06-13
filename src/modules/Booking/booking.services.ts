@@ -47,6 +47,10 @@ const getAllBookingsFromDB = async () => {
     { path: 'slot' },
   ]);
 
+  if (result.length === 0) {
+    return null;
+  }
+
   return result;
 };
 

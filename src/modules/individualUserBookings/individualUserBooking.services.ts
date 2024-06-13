@@ -18,6 +18,10 @@ const getIndividualUserBookingsFromDB = async (
     .select('-customer')
     .populate([{ path: 'service' }, { path: 'slot' }]);
 
+  if (result.length === 0) {
+    return null;
+  }
+
   return result;
 };
 
