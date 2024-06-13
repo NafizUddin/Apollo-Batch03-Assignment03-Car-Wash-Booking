@@ -59,16 +59,6 @@ const globalErrorHandler = (err, req, res, next) => {
             },
         ];
     }
-    // throw new Error Validation
-    else if (err instanceof Error) {
-        message = err === null || err === void 0 ? void 0 : err.message;
-        errorSources = [
-            {
-                path: '',
-                message: err === null || err === void 0 ? void 0 : err.message,
-            },
-        ];
-    }
     return res.status(statusCode).json({
         success: false,
         message,

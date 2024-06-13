@@ -5,6 +5,7 @@ import { TBooking } from './booking.interface';
 import { CarService } from '../CarServices/carService.model';
 import { SlotAppointment } from '../Slots/slots.model';
 import { Booking } from './booking.model';
+import mongoose from 'mongoose';
 
 const createBookingIntoDB = async (
   payload: TBooking,
@@ -33,11 +34,34 @@ const createBookingIntoDB = async (
 
   const bookingData = { ...payload, customer: customerId };
 
-  const result = await (
-    await Booking.create(bookingData)
-  ).populate([{ path: 'customer' }, { path: 'service' }, { path: 'slot' }]);
+  const session = await mongoose.startSession();
 
-  return result;
+  try {
+    session.startTransaction();
+
+    const result = await (
+      await Booking.create(bookingData)
+    ).populate([{ path: 'customer' }, { path: 'service' }, { path: 'slot' }]);
+
+    if (!result) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to book service!');
+    }
+
+    await SlotAppointment.findByIdAndUpdate(
+      slot,
+      { isBooked: 'booked' },
+      { new: true },
+    );
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return result;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to book service!');
+  }
 };
 
 const getAllBookingsFromDB = async () => {
