@@ -17,6 +17,15 @@ const createCarService = catchAsync(async (req, res) => {
 const getAllServices = catchAsync(async (req, res) => {
   const result = await ServicesOfCarService.getAllServicesFromDB();
 
+  if (result === null) {
+    return sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.NOT_FOUND,
+      message: 'No Data Found',
+      data: [],
+    });
+  }
+
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -29,6 +38,16 @@ const getSingleService = catchAsync(async (req, res) => {
   const id = req.params.id;
 
   const result = await ServicesOfCarService.getSingleServiceFromDB(id);
+
+  if (result === null) {
+    return sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.NOT_FOUND,
+      message: 'No Data Found!',
+      data: [],
+    });
+  }
+
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

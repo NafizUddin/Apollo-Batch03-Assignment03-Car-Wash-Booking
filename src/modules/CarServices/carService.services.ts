@@ -17,6 +17,11 @@ const createServiceIntoDB = async (payload: ICarService) => {
 
 const getAllServicesFromDB = async () => {
   const result = await CarService.find();
+
+  if (result.length === 0) {
+    return null;
+  }
+
   return result;
 };
 
@@ -24,7 +29,7 @@ const getSingleServiceFromDB = async (id: string) => {
   const singleService = await CarService.findById(id);
 
   if (singleService?.isDeleted) {
-    throw new AppError(httpStatus.NOT_FOUND, 'No Data Found!');
+    return null;
   } else {
     return singleService;
   }
