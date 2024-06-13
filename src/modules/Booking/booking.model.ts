@@ -16,7 +16,7 @@ const bookingSchema = new Schema<TBooking>(
     },
     slot: {
       type: Schema.Types.ObjectId,
-      ref: 'SlotAppointment',
+      ref: 'Slot', // database name
       required: true,
     },
     vehicleType: {

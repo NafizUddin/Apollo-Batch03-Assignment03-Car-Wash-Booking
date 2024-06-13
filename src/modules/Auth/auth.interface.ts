@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { USER_ROLE } from './auth.constant';
 
 export type TLoginUser = {
@@ -7,6 +7,7 @@ export type TLoginUser = {
 };
 
 export interface IUserSignUp {
+  _id?: Types.ObjectId;
   name: string;
   email: string;
   password: string;
