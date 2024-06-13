@@ -10,27 +10,38 @@ const router = express.Router();
 
 router.post(
   '/',
+  auth(USER_ROLE.admin),
   validateRequest(carServiceValidations.createCarServiceValidationSchema),
   carServiceControllers.createCarService,
 );
 
 router.post(
   '/slots',
+  auth(USER_ROLE.admin),
   validateRequest(
     slotAppointmentValidation.createSlotAppointmentValidationSchema,
   ),
   carServiceControllers.createSlotAppointment,
 );
 
-router.get('/:id', carServiceControllers.getSingleService);
+router.get(
+  '/:id',
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  carServiceControllers.getSingleService,
+);
 
 router.put(
   '/:id',
+  auth(USER_ROLE.admin),
   validateRequest(carServiceValidations.updateCarServiceValidationSchema),
   carServiceControllers.updateService,
 );
 
-router.delete('/:id', carServiceControllers.deleteService);
+router.delete(
+  '/:id',
+  auth(USER_ROLE.admin),
+  carServiceControllers.deleteService,
+);
 
 router.get(
   '/',
