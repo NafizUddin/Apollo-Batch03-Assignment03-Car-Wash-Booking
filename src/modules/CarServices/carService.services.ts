@@ -67,6 +67,10 @@ const createSlotAppointmentIntoDB = async (payload: TSlotAppointment) => {
     throw new AppError(httpStatus.NOT_FOUND, "Car Service doesn't exist!");
   }
 
+  if (service?.isDeleted) {
+    throw new AppError(httpStatus.NOT_FOUND, "Car Service doesn't exist!");
+  }
+
   const startDate = new Date(`${payload.date} ${payload.startTime}`);
   const endDate = new Date(`${payload.date} ${payload.endTime}`);
 
