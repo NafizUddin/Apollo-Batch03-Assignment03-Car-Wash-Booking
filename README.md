@@ -8,7 +8,7 @@
 **Project Motive:** Creating a backend system for a car care platform, including user logins, managing car services, scheduling appointments, and booking services.
 
 ## :computer: Server Live Link
-Click here to see the Server Side Repository: [https://github.com/NafizUddin/BloodHub-Server-Side](https://github.com/NafizUddin/BloodHub-Server-Side)
+Click here to see the Server Side Repository: [https://assignment-03-no-sql-backend-car-washing-booking-system.vercel.app/](https://assignment-03-no-sql-backend-car-washing-booking-system.vercel.app/)
 
 ## :sparkle: Project Features
 
