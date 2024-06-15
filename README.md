@@ -10,6 +10,9 @@
 ## :computer: Server Live Link
 Click here to see the Server Side Repository: [https://assignment-03-no-sql-backend-car-washing-booking-system.vercel.app/](https://assignment-03-no-sql-backend-car-washing-booking-system.vercel.app/)
 
+## :computer: Project Overview Video
+Click here to see the project overview video: [https://drive.google.com/file/d/1EYDLXq_teLSNf5rEzp69fKAOQleaxSba/view?usp=sharing](https://drive.google.com/file/d/1EYDLXq_teLSNf5rEzp69fKAOQleaxSba/view?usp=sharing)
+
 ## :sparkle: Project Features
 
 1. **User logins:** Secure authentication for users to access the platform.
@@ -40,7 +43,7 @@ git clone <repository-url>
 ```
 
 ### :arrow_forward: Step 2: Navigate to the Project Directory
-We nedd to navigate to the cloned repository directory.
+We need to navigate to the cloned repository directory.
 
 ```node
 cd <repository-name>
