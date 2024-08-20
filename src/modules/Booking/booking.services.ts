@@ -39,18 +39,21 @@ const createBookingIntoDB = async (
   try {
     session.startTransaction();
 
-    const result = await (
-      await Booking.create(bookingData)
-    ).populate([{ path: 'customer' }, { path: 'service' }, { path: 'slot' }]);
+    const [createdBooking] = await Booking.create([bookingData], { session });
+    const result = await createdBooking.populate([
+      { path: 'customer' },
+      { path: 'service' },
+      { path: 'slot' },
+    ]);
 
-    if (!result) {
+    if (!Object.keys(result).length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to book service!');
     }
 
     await SlotAppointment.findByIdAndUpdate(
       slot?._id,
       { isBooked: 'booked' },
-      { new: true },
+      { new: true, session },
     );
 
     await session.commitTransaction();
