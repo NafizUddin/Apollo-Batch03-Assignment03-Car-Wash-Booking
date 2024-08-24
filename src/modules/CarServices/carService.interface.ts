@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Model } from 'mongoose';
 
 export interface ICarService {
@@ -6,6 +7,8 @@ export interface ICarService {
   price: number;
   duration: number;
   isDeleted: boolean;
+  short_description: string;
+  image: string;
 }
 
 export interface CarServiceModel extends Model<ICarService> {

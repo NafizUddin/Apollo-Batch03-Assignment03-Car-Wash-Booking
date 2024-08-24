@@ -47,6 +47,9 @@ const signUpValidationSchema = z.object({
         invalid_type_error: 'Address must be a string',
       })
       .trim(),
+    image: z.string({
+      required_error: 'Image is required',
+    }),
   }),
 });
 

@@ -17,4 +17,6 @@ router.post(
   AuthControllers.loginUser,
 );
 
+router.get('/users', AuthControllers.getAllUsers);
+
 export const AuthRoutes = router;

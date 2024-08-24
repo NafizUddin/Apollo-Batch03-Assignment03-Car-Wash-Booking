@@ -24,11 +24,7 @@ router.post(
   carServiceControllers.createSlotAppointment,
 );
 
-router.get(
-  '/:id',
-  auth(USER_ROLE.admin, USER_ROLE.user),
-  carServiceControllers.getSingleService,
-);
+router.get('/:id', carServiceControllers.getSingleService);
 
 router.put(
   '/:id',
@@ -43,10 +39,6 @@ router.delete(
   carServiceControllers.deleteService,
 );
 
-router.get(
-  '/',
-  auth(USER_ROLE.admin, USER_ROLE.user),
-  carServiceControllers.getAllServices,
-);
+router.get('/', carServiceControllers.getAllServices);
 
 export const CarServiceRoutes = router;

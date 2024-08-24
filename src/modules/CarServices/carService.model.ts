@@ -5,9 +5,11 @@ const carServiceSchema = new Schema<ICarService, CarServiceModel>(
   {
     name: { type: String, required: true, unique: true },
     description: { type: String, required: true },
+    short_description: { type: String, required: true },
     price: { type: Number, required: true },
     duration: { type: Number, required: true },
     isDeleted: { type: Boolean, default: false },
+    image: { type: String, required: true },
   },
   {
     timestamps: true,

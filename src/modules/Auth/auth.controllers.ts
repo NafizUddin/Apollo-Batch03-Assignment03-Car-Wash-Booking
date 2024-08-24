@@ -6,11 +6,14 @@ import { AuthServices } from './auth.services';
 const signUpUsers = catchAsync(async (req, res) => {
   const result = await AuthServices.signUpUserIntoDB(req.body);
 
+  const { accessToken, response } = result;
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User registered successfully',
-    data: result,
+    token: accessToken,
+    data: response,
   });
 });
 
@@ -33,7 +36,28 @@ const loginUser = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await AuthServices.getAllUsersFromDB(req.query);
+
+  if (result === null) {
+    return sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.NOT_FOUND,
+      message: 'No Data Found',
+      data: [],
+    });
+  }
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Users retrieved successfully',
+    data: result,
+  });
+});
+
 export const AuthControllers = {
   signUpUsers,
   loginUser,
+  getAllUsers,
 };

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
 import { IUserSignUp, UserModel } from './auth.interface';
 import config from '../../config';
@@ -32,12 +35,16 @@ const UserSignUpSchema = new Schema<IUserSignUp, UserModel>(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
     versionKey: false,
     toJSON: {
-      transform: function (doc, ret, options) {
+      transform: function (_doc, ret, _options) {
         delete ret.password;
         return ret;
       },

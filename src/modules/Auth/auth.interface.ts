@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Model, Types } from 'mongoose';
 import { USER_ROLE } from './auth.constant';
 
@@ -14,6 +15,7 @@ export interface IUserSignUp {
   phone: string;
   role: 'user' | 'admin';
   address: string;
+  image: string;
 }
 
 export interface UserModel extends Model<IUserSignUp> {
