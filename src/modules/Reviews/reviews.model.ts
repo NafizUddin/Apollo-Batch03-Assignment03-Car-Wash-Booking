@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
-import { ReviewModel, TReviews } from './reviews.interface';
+import { ReviewModel, IReviews } from './reviews.interface';
 
-const reviewSchema = new Schema<TReviews, ReviewModel>(
+const reviewSchema = new Schema<IReviews, ReviewModel>(
   {
     feedback: {
       type: String,
@@ -33,8 +33,8 @@ const reviewSchema = new Schema<TReviews, ReviewModel>(
   },
 );
 
-reviewSchema.statics.isReviewExists = async function (email: string) {
+reviewSchema.statics.isReviewsExists = async function (email: string) {
   return await Review.findOne({ email });
 };
 
-export const Review = model<TReviews, ReviewModel>('Review', reviewSchema);
+export const Review = model<IReviews, ReviewModel>('Review', reviewSchema);

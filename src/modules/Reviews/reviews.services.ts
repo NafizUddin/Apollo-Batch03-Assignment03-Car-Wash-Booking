@@ -1,9 +1,9 @@
 import httpStatus from 'http-status';
 import AppError from '../../errors/appError';
-import { TReviews } from './reviews.interface';
+import { IReviews } from './reviews.interface';
 import { Review } from './reviews.model';
 
-const createReviewIntoDB = async (payload: TReviews) => {
+const createReviewIntoDB = async (payload: IReviews) => {
   if (await Review.isReviewsExists(payload?.email)) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Review already exists!');
   }
