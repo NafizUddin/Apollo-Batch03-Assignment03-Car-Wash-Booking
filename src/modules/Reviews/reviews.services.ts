@@ -13,7 +13,7 @@ const createReviewIntoDB = async (payload: IReviews) => {
 };
 
 const getAllReviewsFromDB = async () => {
-  const result = await Review.find();
+  const result = await Review.find().sort('-createdAt');
 
   if (result.length === 0) {
     return null;
