@@ -19,7 +19,13 @@ const getAllReviewsFromDB = async () => {
     return null;
   }
 
-  return result;
+  const totalRatingCount = result.length;
+
+  const sumOfRating = result.reduce((total, item) => total + item.rating, 0);
+
+  const avgRating = Number((sumOfRating / totalRatingCount).toFixed(2));
+
+  return { result, avgRating };
 };
 
 export const ReviewsServices = {

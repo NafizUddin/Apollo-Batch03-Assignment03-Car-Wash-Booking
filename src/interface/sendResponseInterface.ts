@@ -4,4 +4,5 @@ export type TResponse<T> = {
   message?: string;
   token?: string;
   data: T;
+  averageRating?: number;
 };

@@ -30,7 +30,8 @@ const getAllReviews = catchAsync(async (req, res) => {
     success: true,
     statusCode: httpStatus.OK,
     message: 'Reviews retrieved successfully',
-    data: result,
+    averageRating: result.avgRating,
+    data: result.result,
   });
 });
 
