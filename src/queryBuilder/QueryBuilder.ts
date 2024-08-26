@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterQuery, Query } from 'mongoose';
 
 class QueryBuilder<T> {
@@ -32,23 +33,33 @@ class QueryBuilder<T> {
 
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    const { minPrice, maxPrice, minTime, maxTime, ...restQuery } = queryObj;
+    const { priceRanges, minTime, maxTime, ...restQuery } = queryObj;
 
-    const min = parseFloat(minPrice as string) || 0;
-    const max = parseFloat(maxPrice as string) || Number.MAX_VALUE;
     const start = parseFloat(minTime as string) || 10;
     const end = parseFloat(maxTime as string) || 120;
 
+    let priceConditions: string | any[] = [];
+
+    if (typeof priceRanges === 'string' && priceRanges.trim().length > 0) {
+      // Split the priceRanges by comma and create conditions for each range
+      priceConditions = priceRanges.split(',').map((range: string) => {
+        const [minPrice, maxPrice] = range.split('-').map(Number); // Convert to numbers
+        return {
+          price: {
+            $gte: minPrice,
+            $lte: maxPrice,
+          },
+        };
+      });
+    }
+
     const combinedQuery = {
       ...restQuery,
-      price: {
-        $gte: min,
-        $lte: max,
-      },
       duration: {
-        $gte: start,
-        $lte: end,
+        $gte: start, // Greater than or equal to start time
+        $lte: end, // Less than or equal to end time
       },
+      ...(priceConditions.length > 0 && { $or: priceConditions }), // Add the priceConditions if they exist
     };
 
     this.modelQuery = this.modelQuery.find(combinedQuery as FilterQuery<T>);
