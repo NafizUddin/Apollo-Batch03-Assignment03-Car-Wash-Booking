@@ -24,6 +24,7 @@ const createCarServiceValidationSchema = z.object({
     duration: z
       .number()
       .int()
+      .max(120, 'Time duration must be less than 120')
       .positive('Duration must be a positive integer (minutes)'),
     isDeleted: z.boolean().optional(),
     image: z.string({
@@ -60,6 +61,7 @@ const updateCarServiceValidationSchema = z.object({
       .number()
       .int()
       .positive('Duration must be a positive integer (minutes)')
+      .max(120, 'Time duration must be less than 120')
       .optional(),
     isDeleted: z.boolean().optional(),
     image: z

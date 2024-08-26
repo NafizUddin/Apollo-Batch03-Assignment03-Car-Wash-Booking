@@ -5,6 +5,8 @@ import { CarService } from './carService.model';
 import { TSlotAppointment } from '../Slots/slots.interface';
 import { createIntervalsArray } from './carService.utils';
 import { SlotAppointment } from '../Slots/slots.model';
+import QueryBuilder from '../../queryBuilder/QueryBuilder';
+import { carServiceSearchableFields } from './carService.constant';
 
 const createServiceIntoDB = async (payload: ICarService) => {
   if (await CarService.isServiceExists(payload?.name)) {
@@ -15,14 +17,22 @@ const createServiceIntoDB = async (payload: ICarService) => {
   return result;
 };
 
-const getAllServicesFromDB = async () => {
-  const result = await CarService.find();
+const getAllServicesFromDB = async (query: Record<string, unknown>) => {
+  const carServiceQuery = new QueryBuilder(CarService.find(), query)
+    .search(carServiceSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const meta = await carServiceQuery.countTotal();
+  const result = await carServiceQuery.modelQuery;
 
   if (result.length === 0) {
     return null;
   }
 
-  return result;
+  return { meta, result };
 };
 
 const getSingleServiceFromDB = async (id: string) => {
