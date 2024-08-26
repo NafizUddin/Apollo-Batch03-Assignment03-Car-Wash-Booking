@@ -4,9 +4,11 @@ import sendResponse from '../../utils/sendResponse';
 import { BookingServices } from './booking.services';
 
 const createBooking = catchAsync(async (req, res) => {
-  const { serviceId, slotId, ...remaining } = req.body;
+  const { serviceId, slotId } = req.body;
 
-  const modifiedPayload = { service: serviceId, slot: slotId, ...remaining };
+  console.log(req.body);
+
+  const modifiedPayload = { service: serviceId, slot: slotId };
 
   const result = await BookingServices.createBookingIntoDB(
     modifiedPayload,

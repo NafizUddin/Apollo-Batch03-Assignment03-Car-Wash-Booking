@@ -8,7 +8,7 @@ import { Booking } from './booking.model';
 import mongoose from 'mongoose';
 
 const createBookingIntoDB = async (
-  payload: TBooking,
+  payload: Partial<TBooking>,
   userData: Record<string, unknown>,
 ) => {
   const { email } = userData;
@@ -61,9 +61,10 @@ const createBookingIntoDB = async (
 
     return result;
   } catch (error) {
+    console.log(error);
     await session.abortTransaction();
     await session.endSession();
-    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to book service!');
+    // throw new AppError(httpStatus.BAD_REQUEST, 'Failed to book service!');
   }
 };
 
