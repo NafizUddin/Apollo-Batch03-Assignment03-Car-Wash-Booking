@@ -18,6 +18,8 @@ const appError_1 = __importDefault(require("../../errors/appError"));
 const carService_model_1 = require("./carService.model");
 const carService_utils_1 = require("./carService.utils");
 const slots_model_1 = require("../Slots/slots.model");
+const QueryBuilder_1 = __importDefault(require("../../queryBuilder/QueryBuilder"));
+const carService_constant_1 = require("./carService.constant");
 const createServiceIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (yield carService_model_1.CarService.isServiceExists(payload === null || payload === void 0 ? void 0 : payload.name)) {
         throw new appError_1.default(http_status_1.default.BAD_REQUEST, 'Service already exists!');
@@ -25,12 +27,19 @@ const createServiceIntoDB = (payload) => __awaiter(void 0, void 0, void 0, funct
     const result = yield carService_model_1.CarService.create(payload);
     return result;
 });
-const getAllServicesFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield carService_model_1.CarService.find();
+const getAllServicesFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const carServiceQuery = new QueryBuilder_1.default(carService_model_1.CarService.find(), query)
+        .search(carService_constant_1.carServiceSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+    const meta = yield carServiceQuery.countTotal();
+    const result = yield carServiceQuery.modelQuery;
     if (result.length === 0) {
         return null;
     }
-    return result;
+    return { meta, result };
 });
 const getSingleServiceFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const singleService = yield carService_model_1.CarService.findById(id);
@@ -58,6 +67,9 @@ const deleteServiceFromDB = (id) => __awaiter(void 0, void 0, void 0, function* 
 const createSlotAppointmentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const service = yield carService_model_1.CarService.findById(payload.service);
     if (!service) {
+        throw new appError_1.default(http_status_1.default.NOT_FOUND, "Car Service doesn't exist!");
+    }
+    if (service === null || service === void 0 ? void 0 : service.isDeleted) {
         throw new appError_1.default(http_status_1.default.NOT_FOUND, "Car Service doesn't exist!");
     }
     const startDate = new Date(`${payload.date} ${payload.startTime}`);

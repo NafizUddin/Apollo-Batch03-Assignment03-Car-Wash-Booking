@@ -7,6 +7,7 @@ const sendResponse = (res, data) => {
         message: data === null || data === void 0 ? void 0 : data.message,
         token: data === null || data === void 0 ? void 0 : data.token,
         data: data === null || data === void 0 ? void 0 : data.data,
+        averageRating: data === null || data === void 0 ? void 0 : data.averageRating,
     });
 };
 exports.default = sendResponse;

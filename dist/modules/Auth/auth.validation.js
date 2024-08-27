@@ -48,6 +48,9 @@ const signUpValidationSchema = zod_1.z.object({
             invalid_type_error: 'Address must be a string',
         })
             .trim(),
+        image: zod_1.z.string({
+            required_error: 'Image is required',
+        }),
     }),
 });
 exports.authValidations = {

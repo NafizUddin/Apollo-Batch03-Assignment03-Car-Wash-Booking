@@ -39,19 +39,25 @@ const createBookingIntoDB = (payload, userData) => __awaiter(void 0, void 0, voi
     const session = yield mongoose_1.default.startSession();
     try {
         session.startTransaction();
-        const result = yield (yield booking_model_1.Booking.create(bookingData)).populate([{ path: 'customer' }, { path: 'service' }, { path: 'slot' }]);
-        if (!result) {
+        const [createdBooking] = yield booking_model_1.Booking.create([bookingData], { session });
+        const result = yield createdBooking.populate([
+            { path: 'customer' },
+            { path: 'service' },
+            { path: 'slot' },
+        ]);
+        if (!Object.keys(result).length) {
             throw new appError_1.default(http_status_1.default.BAD_REQUEST, 'Failed to book service!');
         }
-        yield slots_model_1.SlotAppointment.findByIdAndUpdate(slot === null || slot === void 0 ? void 0 : slot._id, { isBooked: 'booked' }, { new: true });
+        yield slots_model_1.SlotAppointment.findByIdAndUpdate(slot === null || slot === void 0 ? void 0 : slot._id, { isBooked: 'booked' }, { new: true, session });
         yield session.commitTransaction();
         yield session.endSession();
         return result;
     }
     catch (error) {
+        console.log(error);
         yield session.abortTransaction();
         yield session.endSession();
-        throw new appError_1.default(http_status_1.default.BAD_REQUEST, 'Failed to book service!');
+        // throw new AppError(httpStatus.BAD_REQUEST, 'Failed to book service!');
     }
 });
 const getAllBookingsFromDB = () => __awaiter(void 0, void 0, void 0, function* () {

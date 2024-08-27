@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthServices = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_1 = __importDefault(require("http-status"));
 const appError_1 = __importDefault(require("../../errors/appError"));
 const auth_model_1 = require("./auth.model");
@@ -22,8 +23,14 @@ const signUpUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
     if (yield auth_model_1.User.isUserExists(payload === null || payload === void 0 ? void 0 : payload.email)) {
         throw new appError_1.default(http_status_1.default.BAD_REQUEST, 'Already signed up! Login instead.');
     }
-    const result = yield auth_model_1.User.create(payload);
-    return result;
+    const jwtPayload = {
+        email: payload === null || payload === void 0 ? void 0 : payload.email,
+        role: payload === null || payload === void 0 ? void 0 : payload.role,
+    };
+    const accessToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt_access_secret, config_1.default.jwt_access_expires_in);
+    const response = yield auth_model_1.User.create(payload);
+    const combinedResult = { accessToken, response };
+    return combinedResult;
 });
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield auth_model_1.User.isUserExists(payload === null || payload === void 0 ? void 0 : payload.email);
@@ -41,7 +48,15 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const combinedResult = { accessToken, user };
     return combinedResult;
 });
+const getAllUsersFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = query ? yield auth_model_1.User.find(query) : yield auth_model_1.User.find();
+    if (result.length === 0) {
+        return null;
+    }
+    return result;
+});
 exports.AuthServices = {
     signUpUserIntoDB,
     loginUser,
+    getAllUsersFromDB,
 };

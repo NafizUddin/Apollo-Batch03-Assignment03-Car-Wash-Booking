@@ -6,11 +6,14 @@ import { CarService } from '../CarServices/carService.model';
 import { SlotAppointment } from '../Slots/slots.model';
 import { Booking } from './booking.model';
 import mongoose from 'mongoose';
+import { initiatePayment } from '../../utils/payment';
 
 const createBookingIntoDB = async (
   payload: Partial<TBooking>,
   userData: Record<string, unknown>,
 ) => {
+  const transactionId = `TXN-${payload.service}`;
+
   const { email } = userData;
 
   const user = await User.isUserExists(email as string);
@@ -32,7 +35,7 @@ const createBookingIntoDB = async (
     throw new AppError(httpStatus.NOT_FOUND, "Slot Appointment doesn't exist!");
   }
 
-  const bookingData = { ...payload, customer: customerId };
+  const bookingData = { ...payload, customer: customerId, transactionId };
 
   const session = await mongoose.startSession();
 
@@ -56,10 +59,21 @@ const createBookingIntoDB = async (
       { new: true, session },
     );
 
+    const paymentData = {
+      transactionId,
+      amount: payload?.totalBookingCost,
+      customerName: user.name,
+      customerEmail: user.email,
+      customerPhone: user.phone,
+      customerAddress: user.address,
+    };
+
+    const paymentSession = await initiatePayment(paymentData);
+
     await session.commitTransaction();
     await session.endSession();
 
-    return result;
+    return paymentSession;
   } catch (error) {
     console.log(error);
     await session.abortTransaction();

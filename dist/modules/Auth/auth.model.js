@@ -13,6 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-this-alias */
 const mongoose_1 = require("mongoose");
 const config_1 = __importDefault(require("../../config"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -44,11 +47,15 @@ const UserSignUpSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    image: {
+        type: String,
+        required: true,
+    },
 }, {
     timestamps: true,
     versionKey: false,
     toJSON: {
-        transform: function (doc, ret, options) {
+        transform: function (_doc, ret, _options) {
             delete ret.password;
             return ret;
         },

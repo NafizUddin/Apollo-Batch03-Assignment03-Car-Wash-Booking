@@ -10,37 +10,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SlotServices = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const slots_model_1 = require("./slots.model");
 const getAvailableSlotsFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    if ((query === null || query === void 0 ? void 0 : query.date) && (query === null || query === void 0 ? void 0 : query.serviceId)) {
-        const result = yield slots_model_1.SlotAppointment.find({
-            date: query === null || query === void 0 ? void 0 : query.date,
-            service: query === null || query === void 0 ? void 0 : query.serviceId,
-        }).populate('service');
-        if (result.length === 0) {
-            return null;
-        }
-        return result;
+    const dateArray = (query === null || query === void 0 ? void 0 : query.date) ? query === null || query === void 0 ? void 0 : query.date.split(',') : null; // Split the date string into an array
+    const queryConditions = {};
+    if (dateArray && dateArray.length > 0) {
+        queryConditions.date = { $in: dateArray }; // Use $in operator for matching multiple dates
     }
-    else if (query === null || query === void 0 ? void 0 : query.date) {
-        const result = yield slots_model_1.SlotAppointment.find({
-            date: query === null || query === void 0 ? void 0 : query.date,
-        }).populate('service');
-        if (result.length === 0) {
-            return null;
-        }
-        return result;
+    if (query === null || query === void 0 ? void 0 : query.serviceId) {
+        queryConditions.service = query === null || query === void 0 ? void 0 : query.serviceId;
     }
-    else if (query === null || query === void 0 ? void 0 : query.serviceId) {
-        const result = yield slots_model_1.SlotAppointment.find({
-            service: query === null || query === void 0 ? void 0 : query.serviceId,
-        }).populate('service');
-        if (result.length === 0) {
-            return null;
-        }
-        return result;
-    }
-    const result = yield slots_model_1.SlotAppointment.find().populate('service');
+    const result = yield slots_model_1.SlotAppointment.find(queryConditions).populate('service');
     if (result.length === 0) {
         return null;
     }

@@ -9,27 +9,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CarService = void 0;
+exports.Review = void 0;
 const mongoose_1 = require("mongoose");
-const carServiceSchema = new mongoose_1.Schema({
-    name: { type: String, required: true, unique: true },
-    description: { type: String, required: true },
-    short_description: { type: String, required: true },
-    price: { type: Number, required: true },
-    duration: { type: Number, required: true },
-    isDeleted: { type: Boolean, default: false },
-    image: { type: String, required: true },
+const reviewSchema = new mongoose_1.Schema({
+    feedback: {
+        type: String,
+        required: true,
+    },
+    rating: {
+        type: Number,
+        required: true,
+        min: 1,
+        max: 5,
+    },
+    image: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+    },
 }, {
     timestamps: true,
     versionKey: false,
 });
-carServiceSchema.pre('find', function (next) {
-    this.find({ isDeleted: { $ne: true } });
-    next();
-});
-carServiceSchema.statics.isServiceExists = function (name) {
+reviewSchema.statics.isReviewsExists = function (email) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield exports.CarService.findOne({ name });
+        return yield exports.Review.findOne({ email });
     });
 };
-exports.CarService = (0, mongoose_1.model)('CarService', carServiceSchema);
+exports.Review = (0, mongoose_1.model)('Review', reviewSchema);
