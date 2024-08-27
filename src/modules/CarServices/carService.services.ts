@@ -5,7 +5,7 @@ import { CarService } from './carService.model';
 import { TSlotAppointment } from '../Slots/slots.interface';
 import { createIntervalsArray } from './carService.utils';
 import { SlotAppointment } from '../Slots/slots.model';
-import QueryBuilder from '../../queryBuilder/QueryBuilder';
+import ServiceQueryBuilder from '../../queryBuilder/ServiceQueryBuilder';
 import { carServiceSearchableFields } from './carService.constant';
 
 const createServiceIntoDB = async (payload: ICarService) => {
@@ -18,7 +18,7 @@ const createServiceIntoDB = async (payload: ICarService) => {
 };
 
 const getAllServicesFromDB = async (query: Record<string, unknown>) => {
-  const carServiceQuery = new QueryBuilder(CarService.find(), query)
+  const carServiceQuery = new ServiceQueryBuilder(CarService.find(), query)
     .search(carServiceSearchableFields)
     .filter()
     .sort()

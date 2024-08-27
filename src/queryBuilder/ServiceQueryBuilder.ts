@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterQuery, Query } from 'mongoose';
 
-class QueryBuilder<T> {
+class ServiceQueryBuilder<T> {
   public modelQuery: Query<T[], T>; // the model in which the query operations  will be executed
   public query: Record<string, unknown>; // the query of req.query
 
@@ -112,4 +112,4 @@ class QueryBuilder<T> {
   }
 }
 
-export default QueryBuilder;
+export default ServiceQueryBuilder;
