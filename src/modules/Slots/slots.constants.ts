@@ -5,3 +5,5 @@ export const slotStatus = {
   booked: 'booked',
   canceled: 'canceled',
 } as const;
+
+export const slotSearchableFields = ['date'];

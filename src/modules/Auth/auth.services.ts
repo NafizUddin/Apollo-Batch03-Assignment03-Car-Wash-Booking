@@ -5,6 +5,8 @@ import { IUserSignUp, TLoginUser } from './auth.interface';
 import { User } from './auth.model';
 import { createToken } from './auth.utils';
 import config from '../../config';
+import UserQueryBuilder from '../../queryBuilder/UserQueryBuilder';
+import { userSearchableFields } from './auth.constant';
 
 const signUpUserIntoDB = async (payload: IUserSignUp) => {
   if (await User.isUserExists(payload?.email)) {
@@ -61,13 +63,21 @@ const loginUser = async (payload: TLoginUser) => {
 };
 
 const getAllUsersFromDB = async (query: any) => {
-  const result = query ? await User.find(query) : await User.find();
+  const userQuery = new UserQueryBuilder(User.find(), query)
+    .search(userSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const meta = await userQuery.countTotal();
+  const result = await userQuery.modelQuery;
 
   if (result.length === 0) {
     return null;
   }
 
-  return result;
+  return { meta, result };
 };
 
 export const AuthServices = {
