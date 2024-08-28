@@ -11,6 +11,7 @@ const getAvailableSlotsFromDB = async (query: Record<string, unknown>) => {
   // Apply the filtering logic
   slotAppointmentQuery.filter();
   slotAppointmentQuery.sort();
+  slotAppointmentQuery.paginate();
   slotAppointmentQuery.populate('service');
 
   const meta = await slotAppointmentQuery.countTotal();
