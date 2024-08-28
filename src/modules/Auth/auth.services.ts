@@ -80,8 +80,17 @@ const getAllUsersFromDB = async (query: any) => {
   return { meta, result };
 };
 
+const updateUserIntoDB = async (payload: { isBooked: string }, id: string) => {
+  const result = await User.findByIdAndUpdate(id, payload, {
+    new: true,
+  });
+
+  return result;
+};
+
 export const AuthServices = {
   signUpUserIntoDB,
   loginUser,
   getAllUsersFromDB,
+  updateUserIntoDB,
 };

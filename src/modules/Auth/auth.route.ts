@@ -19,4 +19,10 @@ router.post(
 
 router.get('/users', AuthControllers.getAllUsers);
 
+router.patch(
+  '/users/:id',
+  validateRequest(authValidations.updateUserStatusValidationSchema),
+  AuthControllers.updateUser,
+);
+
 export const AuthRoutes = router;
