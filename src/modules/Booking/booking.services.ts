@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import httpStatus from 'http-status';
 import AppError from '../../errors/appError';
 import { User } from '../Auth/auth.model';
