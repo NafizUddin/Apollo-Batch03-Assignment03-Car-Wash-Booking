@@ -23,6 +23,18 @@ const getAvailableSlotsFromDB = async (query: Record<string, unknown>) => {
   return { meta, result };
 };
 
+const updateServiceIntoDB = async (
+  payload: { isBooked: string },
+  id: string,
+) => {
+  const result = await SlotAppointment.findByIdAndUpdate(id, payload, {
+    new: true,
+  });
+
+  return result;
+};
+
 export const SlotServices = {
   getAvailableSlotsFromDB,
+  updateServiceIntoDB,
 };

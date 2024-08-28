@@ -60,6 +60,16 @@ const createSlotAppointmentValidationSchema = z.object({
     ),
 });
 
+const updateSlotAppointmentValidationSchema = z.object({
+  body: z.object({
+    isBooked: z.enum(['available', 'cancelled'], {
+      required_error: 'isBooked status is required',
+      invalid_type_error: "Status must be either 'available' or 'cancelled'",
+    }),
+  }),
+});
+
 export const slotAppointmentValidation = {
   createSlotAppointmentValidationSchema,
+  updateSlotAppointmentValidationSchema,
 };

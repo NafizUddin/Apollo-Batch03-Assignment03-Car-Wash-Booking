@@ -23,6 +23,20 @@ const getAvailableSlots = catchAsync(async (req, res) => {
   });
 });
 
+const updateSlot = catchAsync(async (req, res) => {
+  const id = req.params.id;
+
+  const result = await SlotServices.updateServiceIntoDB(req.body, id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Slot Appointment updated successfully',
+    data: result,
+  });
+});
+
 export const SlotControllers = {
   getAvailableSlots,
+  updateSlot,
 };
