@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterQuery, Query } from 'mongoose';
 
-class UserQueryBuilder<T> {
+class BaseQueryBuilder<T> {
   public modelQuery: Query<T[], T>; // the model in which the query operations  will be executed
   public query: Record<string, unknown>; // the query of req.query
 
@@ -59,6 +59,11 @@ class UserQueryBuilder<T> {
     return this;
   }
 
+  populate(populateFields: string | string[]) {
+    this.modelQuery = this.modelQuery.populate(populateFields);
+    return this;
+  }
+
   fields() {
     const fields =
       (this?.query?.fields as string)?.split(',')?.join(' ') || '-__v';
@@ -83,4 +88,4 @@ class UserQueryBuilder<T> {
   }
 }
 
-export default UserQueryBuilder;
+export default BaseQueryBuilder;

@@ -5,7 +5,7 @@ import { IUserSignUp, TLoginUser } from './auth.interface';
 import { User } from './auth.model';
 import { createToken } from './auth.utils';
 import config from '../../config';
-import UserQueryBuilder from '../../queryBuilder/UserQueryBuilder';
+import BaseQueryBuilder from '../../queryBuilder/BaseQueryBuilder';
 import { userSearchableFields } from './auth.constant';
 
 const signUpUserIntoDB = async (payload: IUserSignUp) => {
@@ -63,7 +63,7 @@ const loginUser = async (payload: TLoginUser) => {
 };
 
 const getAllUsersFromDB = async (query: any) => {
-  const userQuery = new UserQueryBuilder(User.find(), query)
+  const userQuery = new BaseQueryBuilder(User.find(), query)
     .search(userSearchableFields)
     .filter()
     .sort()

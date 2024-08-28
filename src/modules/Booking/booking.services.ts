@@ -7,6 +7,8 @@ import { SlotAppointment } from '../Slots/slots.model';
 import { Booking } from './booking.model';
 import mongoose from 'mongoose';
 import { initiatePayment } from '../../utils/payment';
+import BaseQueryBuilder from '../../queryBuilder/BaseQueryBuilder';
+import { bookingSearchableFields } from './booking.constant';
 
 const createBookingIntoDB = async (
   payload: Partial<TBooking>,
@@ -82,18 +84,24 @@ const createBookingIntoDB = async (
   }
 };
 
-const getAllBookingsFromDB = async () => {
-  const result = await Booking.find().populate([
-    { path: 'customer' },
-    { path: 'service' },
-    { path: 'slot' },
-  ]);
+const getAllBookingsFromDB = async (query: Record<string, unknown>) => {
+  const bookingQuery = new BaseQueryBuilder(Booking.find(), query)
+    .search(bookingSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .populate('customer')
+    .populate('service')
+    .populate('slot');
+
+  const meta = await bookingQuery.countTotal();
+  const result = await bookingQuery.modelQuery;
 
   if (result.length === 0) {
     return null;
   }
-
-  return result;
+  return { meta, result };
 };
 
 export const BookingServices = {

@@ -12,3 +12,5 @@
 //   'bicycle',
 //   'tractor',
 // ];
+
+export const bookingSearchableFields = ['paymentStatus'];
