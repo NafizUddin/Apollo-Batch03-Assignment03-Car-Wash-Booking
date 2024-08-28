@@ -31,7 +31,7 @@ const updateSlot = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'Slot Appointment updated successfully',
+    message: 'Slot status updated successfully',
     data: result,
   });
 });
