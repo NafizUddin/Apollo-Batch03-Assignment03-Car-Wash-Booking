@@ -8,7 +8,7 @@
 
 ## :computer: Server Live Link
 
-Click here to see the Server Side Repository: [https://assignment-03-no-sql-backend-car-washing-booking-system.vercel.app/](https://assignment-03-no-sql-backend-car-washing-booking-system.vercel.app/)
+Click here to see the Server Side Vercel Live Link: [https://assignment-03-no-sql-backend-car-washing-booking-system.vercel.app/](https://assignment-03-no-sql-backend-car-washing-booking-system.vercel.app/)
 
 ## :computer: Project Overview Video
 
