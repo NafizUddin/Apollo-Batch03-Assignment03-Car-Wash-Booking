@@ -34,6 +34,17 @@ const getAvailableSlots = (0, catchAsync_1.default)((req, res) => __awaiter(void
         data: result,
     });
 }));
+const updateSlot = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const result = yield slots_services_1.SlotServices.updateServiceIntoDB(req.body, id);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Slot status updated successfully',
+        data: result,
+    });
+}));
 exports.SlotControllers = {
     getAvailableSlots,
+    updateSlot,
 };

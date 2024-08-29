@@ -19,6 +19,8 @@ const appError_1 = __importDefault(require("../../errors/appError"));
 const auth_model_1 = require("./auth.model");
 const auth_utils_1 = require("./auth.utils");
 const config_1 = __importDefault(require("../../config"));
+const BaseQueryBuilder_1 = __importDefault(require("../../queryBuilder/BaseQueryBuilder"));
+const auth_constant_1 = require("./auth.constant");
 const signUpUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (yield auth_model_1.User.isUserExists(payload === null || payload === void 0 ? void 0 : payload.email)) {
         throw new appError_1.default(http_status_1.default.BAD_REQUEST, 'Already signed up! Login instead.');
@@ -49,14 +51,28 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return combinedResult;
 });
 const getAllUsersFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = query ? yield auth_model_1.User.find(query) : yield auth_model_1.User.find();
+    const userQuery = new BaseQueryBuilder_1.default(auth_model_1.User.find(), query)
+        .search(auth_constant_1.userSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+    const meta = yield userQuery.countTotal();
+    const result = yield userQuery.modelQuery;
     if (result.length === 0) {
         return null;
     }
+    return { meta, result };
+});
+const updateUserIntoDB = (payload, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_model_1.User.findByIdAndUpdate(id, payload, {
+        new: true,
+    });
     return result;
 });
 exports.AuthServices = {
     signUpUserIntoDB,
     loginUser,
     getAllUsersFromDB,
+    updateUserIntoDB,
 };

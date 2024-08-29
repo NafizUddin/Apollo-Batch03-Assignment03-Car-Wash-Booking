@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookingServices = void 0;
+/* eslint-disable no-console */
 const http_status_1 = __importDefault(require("http-status"));
 const appError_1 = __importDefault(require("../../errors/appError"));
 const auth_model_1 = require("../Auth/auth.model");
@@ -20,7 +21,11 @@ const carService_model_1 = require("../CarServices/carService.model");
 const slots_model_1 = require("../Slots/slots.model");
 const booking_model_1 = require("./booking.model");
 const mongoose_1 = __importDefault(require("mongoose"));
+const payment_1 = require("../../utils/payment");
+const BaseQueryBuilder_1 = __importDefault(require("../../queryBuilder/BaseQueryBuilder"));
+const booking_constant_1 = require("./booking.constant");
 const createBookingIntoDB = (payload, userData) => __awaiter(void 0, void 0, void 0, function* () {
+    // const transactionId = `TXN-${payload.service}`;
     const { email } = userData;
     const user = yield auth_model_1.User.isUserExists(email);
     const customerId = user === null || user === void 0 ? void 0 : user._id;
@@ -49,9 +54,18 @@ const createBookingIntoDB = (payload, userData) => __awaiter(void 0, void 0, voi
             throw new appError_1.default(http_status_1.default.BAD_REQUEST, 'Failed to book service!');
         }
         yield slots_model_1.SlotAppointment.findByIdAndUpdate(slot === null || slot === void 0 ? void 0 : slot._id, { isBooked: 'booked' }, { new: true, session });
+        const paymentData = {
+            transactionId: payload === null || payload === void 0 ? void 0 : payload.transactionId,
+            amount: payload === null || payload === void 0 ? void 0 : payload.totalBookingCost,
+            customerName: user.name,
+            customerEmail: user.email,
+            customerPhone: user.phone,
+            customerAddress: user.address,
+        };
+        const paymentSession = yield (0, payment_1.initiatePayment)(paymentData);
         yield session.commitTransaction();
         yield session.endSession();
-        return result;
+        return paymentSession;
     }
     catch (error) {
         console.log(error);
@@ -60,16 +74,22 @@ const createBookingIntoDB = (payload, userData) => __awaiter(void 0, void 0, voi
         // throw new AppError(httpStatus.BAD_REQUEST, 'Failed to book service!');
     }
 });
-const getAllBookingsFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield booking_model_1.Booking.find().populate([
-        { path: 'customer' },
-        { path: 'service' },
-        { path: 'slot' },
-    ]);
+const getAllBookingsFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const bookingQuery = new BaseQueryBuilder_1.default(booking_model_1.Booking.find(), query)
+        .search(booking_constant_1.bookingSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .populate('customer')
+        .populate('service')
+        .populate('slot');
+    const meta = yield bookingQuery.countTotal();
+    const result = yield bookingQuery.modelQuery;
     if (result.length === 0) {
         return null;
     }
-    return result;
+    return { meta, result };
 });
 exports.BookingServices = {
     createBookingIntoDB,

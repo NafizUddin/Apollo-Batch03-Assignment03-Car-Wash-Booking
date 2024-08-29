@@ -18,6 +18,17 @@ const bookingSchema = new mongoose_1.Schema({
         ref: 'Slot', // database name
         required: true,
     },
+    transactionId: {
+        type: String,
+    },
+    paymentStatus: {
+        type: String,
+        required: true,
+    },
+    totalBookingCost: {
+        type: Number,
+        required: true,
+    },
 }, {
     timestamps: true,
     versionKey: false,

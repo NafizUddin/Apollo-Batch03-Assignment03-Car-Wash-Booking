@@ -10,6 +10,16 @@ const createBookingValidationSchema = zod_1.z.object({
         slotId: zod_1.z.string({
             required_error: 'Slot Id is required',
         }),
+        transactionId: zod_1.z.string({
+            required_error: 'transactionId is required',
+        }),
+        paymentStatus: zod_1.z
+            .string({
+            required_error: 'Payment Status is required',
+            invalid_type_error: 'Payment Status must be a string',
+        })
+            .trim(),
+        totalBookingCost: zod_1.z.number().nonnegative().min(1),
     }),
 });
 exports.bookingValidations = {

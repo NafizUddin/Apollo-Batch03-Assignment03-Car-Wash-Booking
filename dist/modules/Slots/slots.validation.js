@@ -47,6 +47,15 @@ const createSlotAppointmentValidationSchema = zod_1.z.object({
         path: ['endTime'], // Specify the field to which the error message should be attached
     }),
 });
+const updateSlotAppointmentValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        isBooked: zod_1.z.enum(['available', 'cancelled', 'expired'], {
+            required_error: 'isBooked status is required',
+            invalid_type_error: "Status must be either 'available', 'cancelled' or 'expired'",
+        }),
+    }),
+});
 exports.slotAppointmentValidation = {
     createSlotAppointmentValidationSchema,
+    updateSlotAppointmentValidationSchema,
 };

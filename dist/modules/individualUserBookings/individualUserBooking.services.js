@@ -23,9 +23,11 @@ const getIndividualUserBookingsFromDB = (userData) => __awaiter(void 0, void 0, 
     if (!user) {
         throw new appError_1.default(http_status_1.default.NOT_FOUND, "User doesn't exist!");
     }
-    const result = yield booking_model_1.Booking.find({ customer: user === null || user === void 0 ? void 0 : user._id })
-        .select('-customer')
-        .populate([{ path: 'service' }, { path: 'slot' }]);
+    const result = yield booking_model_1.Booking.find({ customer: user === null || user === void 0 ? void 0 : user._id }).populate([
+        { path: 'service' },
+        { path: 'slot' },
+        { path: 'customer' },
+    ]);
     if (result.length === 0) {
         return null;
     }

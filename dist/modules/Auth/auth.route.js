@@ -12,4 +12,5 @@ const router = express_1.default.Router();
 router.post('/signup', (0, validateRequest_1.default)(auth_validation_1.authValidations.signUpValidationSchema), auth_controllers_1.AuthControllers.signUpUsers);
 router.post('/login', (0, validateRequest_1.default)(auth_validation_1.authValidations.loginValidationSchema), auth_controllers_1.AuthControllers.loginUser);
 router.get('/users', auth_controllers_1.AuthControllers.getAllUsers);
+router.patch('/users/:id', (0, validateRequest_1.default)(auth_validation_1.authValidations.updateUserStatusValidationSchema), auth_controllers_1.AuthControllers.updateUser);
 exports.AuthRoutes = router;

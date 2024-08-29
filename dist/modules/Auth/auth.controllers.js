@@ -60,8 +60,19 @@ const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+const updateUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const result = yield auth_services_1.AuthServices.updateUserIntoDB(req.body, id);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'User updated successfully',
+        data: result,
+    });
+}));
 exports.AuthControllers = {
     signUpUsers,
     loginUser,
     getAllUsers,
+    updateUser,
 };

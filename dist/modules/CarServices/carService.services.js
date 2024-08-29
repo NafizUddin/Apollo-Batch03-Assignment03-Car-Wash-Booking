@@ -18,7 +18,7 @@ const appError_1 = __importDefault(require("../../errors/appError"));
 const carService_model_1 = require("./carService.model");
 const carService_utils_1 = require("./carService.utils");
 const slots_model_1 = require("../Slots/slots.model");
-const QueryBuilder_1 = __importDefault(require("../../queryBuilder/QueryBuilder"));
+const ServiceQueryBuilder_1 = __importDefault(require("../../queryBuilder/ServiceQueryBuilder"));
 const carService_constant_1 = require("./carService.constant");
 const createServiceIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (yield carService_model_1.CarService.isServiceExists(payload === null || payload === void 0 ? void 0 : payload.name)) {
@@ -28,7 +28,7 @@ const createServiceIntoDB = (payload) => __awaiter(void 0, void 0, void 0, funct
     return result;
 });
 const getAllServicesFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const carServiceQuery = new QueryBuilder_1.default(carService_model_1.CarService.find(), query)
+    const carServiceQuery = new ServiceQueryBuilder_1.default(carService_model_1.CarService.find(), query)
         .search(carService_constant_1.carServiceSearchableFields)
         .filter()
         .sort()
