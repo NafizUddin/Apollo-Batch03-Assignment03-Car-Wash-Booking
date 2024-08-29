@@ -14,9 +14,11 @@ const getIndividualUserBookingsFromDB = async (
     throw new AppError(httpStatus.NOT_FOUND, "User doesn't exist!");
   }
 
-  const result = await Booking.find({ customer: user?._id })
-    .select('-customer')
-    .populate([{ path: 'service' }, { path: 'slot' }]);
+  const result = await Booking.find({ customer: user?._id }).populate([
+    { path: 'service' },
+    { path: 'slot' },
+    { path: 'customer' },
+  ]);
 
   if (result.length === 0) {
     return null;

@@ -15,7 +15,7 @@ const createBookingIntoDB = async (
   payload: Partial<TBooking>,
   userData: Record<string, unknown>,
 ) => {
-  const transactionId = `TXN-${payload.service}`;
+  // const transactionId = `TXN-${payload.service}`;
 
   const { email } = userData;
 
@@ -38,7 +38,7 @@ const createBookingIntoDB = async (
     throw new AppError(httpStatus.NOT_FOUND, "Slot Appointment doesn't exist!");
   }
 
-  const bookingData = { ...payload, customer: customerId, transactionId };
+  const bookingData = { ...payload, customer: customerId };
 
   const session = await mongoose.startSession();
 
@@ -63,7 +63,7 @@ const createBookingIntoDB = async (
     );
 
     const paymentData = {
-      transactionId,
+      transactionId: payload?.transactionId,
       amount: payload?.totalBookingCost,
       customerName: user.name,
       customerEmail: user.email,

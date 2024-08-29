@@ -8,7 +8,9 @@ const createBookingValidationSchema = z.object({
     slotId: z.string({
       required_error: 'Slot Id is required',
     }),
-    transactionId: z.string().optional(),
+    transactionId: z.string({
+      required_error: 'transactionId is required',
+    }),
     paymentStatus: z
       .string({
         required_error: 'Payment Status is required',
