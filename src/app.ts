@@ -8,10 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      'https://turboshine-apollob3a5.netlify.app',
-      'http://localhost:5173',
-    ], // Allow requests from this origin
+    origin: ['https://turboshine-apollob3a5.netlify.app'], // Allow requests from this origin
     credentials: true, // Allow cookies and other credentials
   }),
 );
