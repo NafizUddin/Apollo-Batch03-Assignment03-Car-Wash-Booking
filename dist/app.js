@@ -11,7 +11,7 @@ const routes_1 = __importDefault(require("./routes"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173', // Allow requests from this origin
+    origin: ['https://turboshine-apollob3a5.netlify.app'], // Allow requests from this origin
     credentials: true, // Allow cookies and other credentials
 }));
 app.use('/api', routes_1.default);
